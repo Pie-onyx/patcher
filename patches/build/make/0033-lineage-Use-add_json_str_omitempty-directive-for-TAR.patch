@@ -1,0 +1,29 @@
+From 9c738e01fc3bfe7551bed30c7f57c2407da9eb41 Mon Sep 17 00:00:00 2001
+From: Paul Keith <javelinanddart@gmail.com>
+Date: Fri, 21 Sep 2018 00:52:58 +0200
+Subject: [PATCH 33/44] lineage: Use add_json_str_omitempty directive for
+ TARGET_LD_SHIM_LIBS
+
+* The code is ifdef'ed out, so let's match that expecation here
+
+Change-Id: I59c8e276c3dd28c4f46222f66d626e48b2aa6551
+---
+ core/soong_config.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/core/soong_config.mk b/core/soong_config.mk
+index ea341ac..943b97f 100644
+--- a/core/soong_config.mk
++++ b/core/soong_config.mk
+@@ -109,7 +109,7 @@ else
+ endif
+ $(call add_json_bool, Has_legacy_camera_hal1,            $(filter true,$(if $(filter true,$(TARGET_HAS_LEGACY_CAMERA_HAL1)),true,false)))
+ $(call add_json_str_omitempty, Target_process_sdk_version_override, $(TARGET_PROCESS_SDK_VERSION_OVERRIDE))
+-$(call add_json_str,  Target_shim_libs,                  $(subst $(space),:,$(TARGET_LD_SHIM_LIBS)))
++$(call add_json_str_omitempty, Target_shim_libs,         $(subst $(space),:,$(TARGET_LD_SHIM_LIBS)))
+ $(call add_json_bool, Uses_media_extensions,             $(filter true,$(if $(filter true,$(TARGET_USES_MEDIA_EXTENSIONS)),true,false)))
+ $(call add_json_bool, Uses_qcom_bsp_legacy,              $(filter true,$(if $(filter msm7x27a msm7x30 msm8660 msm8960,$(TARGET_BOARD_PLATFORM)),true,false)))
+ 
+-- 
+2.7.4
+

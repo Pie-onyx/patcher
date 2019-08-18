@@ -1,0 +1,39 @@
+From 06f70867f6e2df8174d5834af603586d1a7524c1 Mon Sep 17 00:00:00 2001
+From: Paul Keith <javelinanddart@gmail.com>
+Date: Thu, 15 Feb 2018 21:46:00 +0100
+Subject: [PATCH 5/8] soong: Add var for linker shim libs
+
+* To limit security exposure, we're forcing all devices
+  to define shim libs with a TARGET_LD_SHIM_LIBS
+
+Change-Id: Ic8722c42807429f2faa3546316c71c40533ce195
+---
+ android/variable.go | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/android/variable.go b/android/variable.go
+index d241689..1c0c6a2 100644
+--- a/android/variable.go
++++ b/android/variable.go
+@@ -127,6 +127,10 @@ type variableProperties struct {
+ 			Srcs         []string
+ 		}
+ 
++		Target_shim_libs struct {
++			Cppflags []string
++		}
++
+ 		Uses_qcom_bsp_legacy struct {
+ 			Cflags []string
+ 		}
+@@ -292,6 +296,7 @@ type productVariables struct {
+ 	ProductHiddenAPIStubsSystem []string `json:",omitempty"`
+ 	ProductHiddenAPIStubsTest   []string `json:",omitempty"`
+ 
++	Target_shim_libs *string `json:",omitempty"`
+ 	Uses_qcom_bsp_legacy *bool `json:",omitempty"`
+ }
+ 
+-- 
+2.7.4
+

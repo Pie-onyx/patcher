@@ -1,0 +1,27 @@
+From 983f94e6876d9aa0492b627891c2d8005bd83720 Mon Sep 17 00:00:00 2001
+From: Christian Oder <myself5@carbonrom.org>
+Date: Wed, 25 Oct 2017 17:56:27 +0200
+Subject: [PATCH 28/44] soong_config: Add Uses_qcom_bsp_legacy config
+
+ * Forward-port to AOSP P
+
+Change-Id: Ib9284864e77a18e07f048a4afd26f2da1b6c1485
+---
+ core/soong_config.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/core/soong_config.mk b/core/soong_config.mk
+index fe09746..5adf738 100644
+--- a/core/soong_config.mk
++++ b/core/soong_config.mk
+@@ -104,6 +104,7 @@ $(call add_json_list, CoverageExcludePaths,              $(COVERAGE_EXCLUDE_PATH
+ 
+ $(call add_json_bool, Has_legacy_camera_hal1,            $(filter true,$(if $(filter true,$(TARGET_HAS_LEGACY_CAMERA_HAL1)),true,false)))
+ $(call add_json_bool, Uses_media_extensions,             $(filter true,$(if $(filter true,$(TARGET_USES_MEDIA_EXTENSIONS)),true,false)))
++$(call add_json_bool, Uses_qcom_bsp_legacy,              $(filter true,$(if $(filter msm7x27a msm7x30 msm8660 msm8960,$(TARGET_BOARD_PLATFORM)),true,false)))
+ 
+ $(call add_json_bool, ArtUseReadBarrier,                 $(call invert_bool,$(filter false,$(PRODUCT_ART_USE_READ_BARRIER))))
+ $(call add_json_bool, Binder32bit,                       $(BINDER32BIT))
+-- 
+2.7.4
+

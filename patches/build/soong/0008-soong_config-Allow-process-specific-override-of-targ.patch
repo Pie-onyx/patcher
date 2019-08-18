@@ -1,0 +1,37 @@
+From d49c292ed7715d41671fb651775ae4d726948693 Mon Sep 17 00:00:00 2001
+From: Danny Baumann <dannybaumann@web.de>
+Date: Wed, 29 Aug 2018 11:04:58 +0200
+Subject: [PATCH 8/8] soong_config: Allow process-specific override of target
+ SDK version
+
+Change-Id: I775e852c17af12d2233e644e3db10c10bcb20d19
+---
+ android/variable.go | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/android/variable.go b/android/variable.go
+index 534fb1b..9e87e3d 100644
+--- a/android/variable.go
++++ b/android/variable.go
+@@ -135,6 +135,10 @@ type variableProperties struct {
+ 			Cflags []string
+ 		}
+ 
++		Target_process_sdk_version_override struct {
++			Cppflags []string
++		}
++
+ 		Target_shim_libs struct {
+ 			Cppflags []string
+ 		}
+@@ -306,6 +310,7 @@ type productVariables struct {
+ 
+ 	Additional_gralloc_10_usage_bits  *string `json:",omitempty"`
+ 	Has_legacy_camera_hal1 *bool `json:",omitempty"`
++	Target_process_sdk_version_override *string `json:",omitempty"`
+ 	Target_shim_libs *string `json:",omitempty"`
+ 	Uses_qcom_bsp_legacy *bool `json:",omitempty"`
+ }
+-- 
+2.7.4
+

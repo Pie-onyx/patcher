@@ -1,0 +1,41 @@
+From 754d9a9b90ae940915244e139c5d90ad74d406d6 Mon Sep 17 00:00:00 2001
+From: Kshitij Gupta <kshitijgm@gmail.com>
+Date: Fri, 16 Aug 2019 18:43:31 +0530
+Subject: [PATCH 07/16] Don't format formattable partitions if mount fails
+
+- Forward port to Q, based on revert of change
+  29dd6b6c01295222fee5ef2fc70692b2ecb12504 in bootable/recovery
+
+Change-Id: Ibd896e611eb2140c9bc2402d6ef623f8c9ee3bf5
+Signed-off-by: Kshitij Gupta <kshitijgm@gmail.com>
+---
+ fs_mgr/fs_mgr_roots.cpp | 13 +------------
+ 1 file changed, 1 insertion(+), 12 deletions(-)
+
+diff --git a/fs_mgr/fs_mgr_roots.cpp b/fs_mgr/fs_mgr_roots.cpp
+index 58ef9b6..0403088 100644
+--- a/fs_mgr/fs_mgr_roots.cpp
++++ b/fs_mgr/fs_mgr_roots.cpp
+@@ -117,18 +117,7 @@ bool EnsurePathMounted(Fstab* fstab, const std::string& path, const std::string&
+         return false;
+     }
+ 
+-    int result = fs_mgr_do_mount_one(*rec, mount_point);
+-    if (result == -1 && rec->fs_mgr_flags.formattable) {
+-        PERROR << "Failed to mount " << mount_point << "; formatting";
+-        bool crypt_footer = rec->is_encryptable() && rec->key_loc == "footer";
+-        if (fs_mgr_do_format(*rec, crypt_footer) != 0) {
+-            PERROR << "Failed to format " << mount_point;
+-            return false;
+-        }
+-        result = fs_mgr_do_mount_one(*rec, mount_point);
+-    }
+-
+-    if (result == -1) {
++    if (fs_mgr_do_mount_one(*rec, mount_point) == -1) {
+         PERROR << "Failed to mount " << mount_point;
+         return false;
+     }
+-- 
+2.7.4
+

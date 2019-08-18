@@ -1,0 +1,37 @@
+From ffea3f72daac14d797590f52be357bf974b24d4d Mon Sep 17 00:00:00 2001
+From: Adrian DC <radian.dc@gmail.com>
+Date: Mon, 24 Jul 2017 14:32:38 +0200
+Subject: [PATCH 6/8] soong: Add has_legacy_camera_hal1 product variable
+
+Change-Id: I9c430bf5375b7adf2bbf273b76809c796cd6ac7d
+Signed-off-by: Adrian DC <radian.dc@gmail.com>
+---
+ android/variable.go | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/android/variable.go b/android/variable.go
+index 1c0c6a2..3dc234f 100644
+--- a/android/variable.go
++++ b/android/variable.go
+@@ -127,6 +127,10 @@ type variableProperties struct {
+ 			Srcs         []string
+ 		}
+ 
++		Has_legacy_camera_hal1 struct {
++			Cflags []string
++		}
++
+ 		Target_shim_libs struct {
+ 			Cppflags []string
+ 		}
+@@ -296,6 +300,7 @@ type productVariables struct {
+ 	ProductHiddenAPIStubsSystem []string `json:",omitempty"`
+ 	ProductHiddenAPIStubsTest   []string `json:",omitempty"`
+ 
++	Has_legacy_camera_hal1 *bool `json:",omitempty"`
+ 	Target_shim_libs *string `json:",omitempty"`
+ 	Uses_qcom_bsp_legacy *bool `json:",omitempty"`
+ }
+-- 
+2.7.4
+

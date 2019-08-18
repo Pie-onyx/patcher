@@ -1,0 +1,61 @@
+From 2ec9f985d213fe8a23b4141fad5e336976ba97cc Mon Sep 17 00:00:00 2001
+From: Nico <nicorg2529@gmail.com>
+Date: Fri, 8 Mar 2019 09:49:43 +0000
+Subject: [PATCH] Allow to disable the new scan API for manual network search.
+
+The implementation to attempt new API and then fallback after
+error is generic but may be not efficient. For the devices that
+is not capable of using new API, it lengthens the network search
+because of the new API scan trial in the first place and may fail
+if the error is not properly caught.
+(Refer to Ifebbac9965a40acaff0d50d32ca8603c72a6a77f for details)
+
+As an alternative, this commit provides a config for devices that
+are known as not capable of using new API to disable new API scan
+and start network search through old API directly.
+
+Change-Id: Iac3d70d91ee449a3a2ce4e5729176e09cb80b711
+---
+ res/values/config.xml                          | 6 ++++++
+ src/com/android/phone/NetworkQueryService.java | 8 ++++++++
+ 2 files changed, 14 insertions(+)
+
+diff --git a/res/values/config.xml b/res/values/config.xml
+index 6b6bf04..61a6573 100644
+--- a/res/values/config.xml
++++ b/res/values/config.xml
+@@ -254,6 +254,12 @@
+     <!-- Intent action to launch target emergency app. -->
+     <string name="config_emergency_app_intent" translatable="false"></string>
+ 
++    <!-- Flag indicating if network query through TelephonyManager.requestNetworkScan() should be
++         disabled.
++         If set to true, it will send network query through Phone.getAvailableNetworks() directly
++         rather than attempt to query through TelephonyManager.requestNetworkScan() first. -->
++    <bool name="config_disable_TelephonyManager_network_scan">false</bool>
++
+     <!-- The country list that shortcut view can be enabled. -->
+     <string-array name="config_countries_to_enable_shortcut_view" translatable="false">
+     </string-array>
+diff --git a/src/com/android/phone/NetworkQueryService.java b/src/com/android/phone/NetworkQueryService.java
+index e67582f..d8a55cb 100644
+--- a/src/com/android/phone/NetworkQueryService.java
++++ b/src/com/android/phone/NetworkQueryService.java
+@@ -195,6 +195,14 @@ public class NetworkQueryService extends Service {
+                     switch (mState) {
+                         case QUERY_READY:
+ 
++                            final boolean isRequestNetworkScanDisabled =
++                                    getApplicationContext().getResources().getBoolean(
++                                            R.bool.config_disable_TelephonyManager_network_scan);
++                            if (isRequestNetworkScanDisabled && isIncrementalResult) {
++                                if (DBG) log("network scan via TelephonyManager is disabled");
++                                isIncrementalResult = false;
++                            }
++
+                             if (isIncrementalResult) {
+                                 if (DBG) log("start network scan via TelephonManager");
+                                 TelephonyManager tm = (TelephonyManager) getSystemService(
+-- 
+2.7.4
+

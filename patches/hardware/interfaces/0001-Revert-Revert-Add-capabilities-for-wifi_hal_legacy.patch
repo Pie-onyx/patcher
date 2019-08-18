@@ -1,0 +1,26 @@
+From a929dbd9fcb93730b58d4d7659c6867ca03b4f18 Mon Sep 17 00:00:00 2001
+From: Artem Borisov <dedsa2002@gmail.com>
+Date: Thu, 2 Nov 2017 23:43:10 +0300
+Subject: [PATCH 1/2] Revert "Revert "Add capabilities for wifi_hal_legacy""
+
+This is causing WiFi to just not work on all devices
+
+This reverts commit b666cdae0f3d5a53e190ecccac6f18cf2e8742c6.
+
+Change-Id: I5fa8ab183902ff4290ccb236132627eb2bc1caf0
+---
+ wifi/1.2/default/android.hardware.wifi@1.0-service.rc | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/wifi/1.2/default/android.hardware.wifi@1.0-service.rc b/wifi/1.2/default/android.hardware.wifi@1.0-service.rc
+index cf849d0..b002e60 100644
+--- a/wifi/1.2/default/android.hardware.wifi@1.0-service.rc
++++ b/wifi/1.2/default/android.hardware.wifi@1.0-service.rc
+@@ -3,3 +3,4 @@ service vendor.wifi_hal_legacy /vendor/bin/hw/android.hardware.wifi@1.0-service
+     capabilities NET_ADMIN NET_RAW SYS_MODULE
+     user wifi
+     group wifi gps
++    capabilities NET_ADMIN NET_RAW
+-- 
+2.7.4
+

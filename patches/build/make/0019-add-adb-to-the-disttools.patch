@@ -1,0 +1,25 @@
+From ce19261487499bbe7f9f3a051be2e2a7ecea80a7 Mon Sep 17 00:00:00 2001
+From: Koushik Dutta <koushd@gmail.com>
+Date: Tue, 18 Jun 2013 14:17:21 -0700
+Subject: [PATCH 19/44] add adb to the disttools
+
+Change-Id: I898fa5c9396606144e57dba8453f476b9e9440ab
+---
+ core/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/core/Makefile b/core/Makefile
+index 785dbea..53c9363 100644
+--- a/core/Makefile
++++ b/core/Makefile
+@@ -3525,6 +3525,7 @@ endif
+ ifeq ($(build_otatools_package),true)
+ OTATOOLS :=  $(HOST_OUT_EXECUTABLES)/minigzip \
+   $(HOST_OUT_EXECUTABLES)/aapt \
++  $(HOST_OUT_EXECUTABLES)/adb \
+   $(HOST_OUT_EXECUTABLES)/checkvintf \
+   $(HOST_OUT_EXECUTABLES)/mkbootfs \
+   $(HOST_OUT_EXECUTABLES)/mkbootimg \
+-- 
+2.7.4
+

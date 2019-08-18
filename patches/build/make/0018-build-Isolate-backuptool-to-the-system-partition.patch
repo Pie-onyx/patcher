@@ -1,0 +1,145 @@
+From 51fa4163ecde9968d2f14428eee3ffeb562c80af Mon Sep 17 00:00:00 2001
+From: Adrian DC <radian.dc@gmail.com>
+Date: Tue, 7 Aug 2018 20:41:15 +0200
+Subject: [PATCH 18/44] build: Isolate backuptool to the system partition
+
+ * Pass the version number through updater-script
+ * Avoid using any install/ scripts or tools
+
+ * Avoids depending on deprecated recovery code
+    for UnpackPackageDir and SetPermissionsRecursive
+
+ * First migration from an old build will require
+    the backuptool scripts to be migrated first
+    (standalone install zip created for this purpose)
+    or needs the users to upgrade and reinstall addons
+    like GApps without rebooting to prevent losses
+
+Change-Id: I7b6a40b2a31454e8ac00e44e6ccfce9090d1ed9e
+Signed-off-by: Adrian DC <radian.dc@gmail.com>
+---
+ target/product/full_base.mk                 |  4 ++--
+ tools/install/backuptool.functions          |  2 +-
+ tools/install/backuptool.sh                 |  5 +++--
+ tools/releasetools/edify_generator.py       |  4 ++--
+ tools/releasetools/ota_from_target_files.py | 20 ++++----------------
+ 5 files changed, 12 insertions(+), 23 deletions(-)
+
+diff --git a/target/product/full_base.mk b/target/product/full_base.mk
+index dd57ff4..4141804 100644
+--- a/target/product/full_base.mk
++++ b/target/product/full_base.mk
+@@ -51,8 +51,8 @@ PRODUCT_LOCALES := en_US
+ 
+ # Import backuptool scripts
+ PRODUCT_COPY_FILES += \
+-    build/make/tools/install/backuptool.functions:install/bin/backuptool.functions \
+-    build/make/tools/install/backuptool.sh:install/bin/backuptool.sh
++    build/make/tools/install/backuptool.functions:$(TARGET_COPY_OUT_SYSTEM)/bin/backuptool.functions \
++    build/make/tools/install/backuptool.sh:$(TARGET_COPY_OUT_SYSTEM)/bin/backuptool.sh
+ 
+ # Get some sounds
+ $(call inherit-product-if-exists, frameworks/base/data/sounds/AllAudio.mk)
+diff --git a/tools/install/backuptool.functions b/tools/install/backuptool.functions
+index e28a3a6..73bdf57 100644
+--- a/tools/install/backuptool.functions
++++ b/tools/install/backuptool.functions
+@@ -5,7 +5,7 @@
+ 
+ export C=/tmp/backupdir
+ export S=/system
+-export V=9.
++export V=`cat /tmp/backuptool.version`
+ 
+ backup_file() {
+   if [ -e "$1" ]; then
+diff --git a/tools/install/backuptool.sh b/tools/install/backuptool.sh
+index 564d757..137ef1d 100644
+--- a/tools/install/backuptool.sh
++++ b/tools/install/backuptool.sh
+@@ -5,10 +5,11 @@
+ 
+ export C=/tmp/backupdir
+ export S=/system
+-export V=9.
++export V=$2
+ 
+ # Scripts in /system/addon.d expect to find backuptool.functions in /tmp
+-cp -f /tmp/install/bin/backuptool.functions /tmp
++echo "$V" >/tmp/backuptool.version
++cp -f /system/bin/backuptool.functions /tmp
+ 
+ # Preserve /system/addon.d in /tmp/addon.d
+ preserve_addon_d() {
+diff --git a/tools/releasetools/edify_generator.py b/tools/releasetools/edify_generator.py
+index c5ade22..bcd2ee3 100644
+--- a/tools/releasetools/edify_generator.py
++++ b/tools/releasetools/edify_generator.py
+@@ -153,8 +153,8 @@ class EdifyGenerator(object):
+            ");")
+     self.script.append(self.WordWrap(cmd))
+ 
+-  def RunBackup(self, command):
+-    self.script.append(('run_program("/tmp/install/bin/backuptool.sh", "%s");' % command))
++  def RunBackup(self, command, version):
++    self.script.append(('run_program("/sbin/sh", "/system/bin/backuptool.sh", "%s", "%s");' % (command, version)))
+ 
+   def ShowProgress(self, frac, dur):
+     """Update the progress bar, advancing it over 'frac' over the next
+diff --git a/tools/releasetools/ota_from_target_files.py b/tools/releasetools/ota_from_target_files.py
+index 97f5f8e..a73b23b 100755
+--- a/tools/releasetools/ota_from_target_files.py
++++ b/tools/releasetools/ota_from_target_files.py
+@@ -245,6 +245,8 @@ OPTIONS.output_metadata_path = None
+ OPTIONS.override_device = 'auto'
+ OPTIONS.backuptool = False
+ 
++BACKUPTOOL_VERSION = '8.'
++
+ METADATA_NAME = 'META-INF/com/android/metadata'
+ POSTINSTALL_CONFIG = 'META/postinstall_config.txt'
+ DYNAMIC_PARTITION_INFO = 'META/dynamic_partitions_info.txt'
+@@ -828,15 +830,6 @@ def AddCompatibilityArchiveIfTrebleEnabled(target_zip, output_zip, target_info,
+   AddCompatibilityArchive(system_updated, vendor_updated)
+ 
+ 
+-def CopyInstallTools(output_zip):
+-  install_path = os.path.join(OPTIONS.input_tmp, "INSTALL")
+-  for root, subdirs, files in os.walk(install_path):
+-     for f in files:
+-      install_source = os.path.join(root, f)
+-      install_target = os.path.join("install", os.path.relpath(root, install_path), f)
+-      output_zip.write(install_source, install_target)
+-
+-
+ def WriteFullOTAPackage(input_zip, output_file):
+   target_info = BuildInfo(OPTIONS.info_dict, OPTIONS.oem_dicts)
+ 
+@@ -930,14 +923,9 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
+   script.AppendExtra("ifelse(is_mounted(\"/system\"), unmount(\"/system\"));")
+   device_specific.FullOTA_InstallBegin()
+ 
+-  CopyInstallTools(output_zip)
+-  script.UnpackPackageDir("install", "/tmp/install")
+-  script.SetPermissionsRecursive("/tmp/install", 0, 0, 0755, 0644, None, None)
+-  script.SetPermissionsRecursive("/tmp/install/bin", 0, 0, 0755, 0755, None, None)
+-
+   if OPTIONS.backuptool:
+     script.Mount("/system")
+-    script.RunBackup("backup")
++    script.RunBackup("backup", BACKUPTOOL_VERSION)
+     script.Unmount("/system")
+ 
+   system_progress = 0.75
+@@ -1003,7 +991,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
+   if OPTIONS.backuptool:
+     script.ShowProgress(0.02, 10)
+     script.Mount("/system")
+-    script.RunBackup("restore")
++    script.RunBackup("restore", BACKUPTOOL_VERSION)
+     script.Unmount("/system")
+ 
+   script.ShowProgress(0.05, 5)
+-- 
+2.7.4
+

@@ -1,0 +1,25 @@
+From e3b37bc91fa1ddc2018345ca2fcba6a26abf2d5e Mon Sep 17 00:00:00 2001
+From: Michael Bestas <mkbestas@lineageos.org>
+Date: Thu, 21 Dec 2017 04:03:01 +0200
+Subject: [PATCH 1/8] cleanbuild: add *.zip.md5sum to installclean_files
+
+Change-Id: I9af8579f4acf5043375650ec4f7fadb66c0eb15e
+---
+ ui/build/cleanbuild.go | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/ui/build/cleanbuild.go b/ui/build/cleanbuild.go
+index c47f614..9c0c76f 100644
+--- a/ui/build/cleanbuild.go
++++ b/ui/build/cleanbuild.go
+@@ -98,6 +98,7 @@ func installClean(ctx Context, config Config, what int) {
+ 		hostOut("vts"),
+ 		productOut("*.img"),
+ 		productOut("*.zip"),
++		productOut("*.zip.md5sum"),
+ 		productOut("android-info.txt"),
+ 		productOut("kernel"),
+ 		productOut("data"),
+-- 
+2.7.4
+

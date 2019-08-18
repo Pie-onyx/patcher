@@ -1,0 +1,31 @@
+From 2d518df482453dc62adcda0593449c113ec5baf9 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Micha=C3=ABl=20Burtin?= <bukington@gmail.com>
+Date: Sun, 5 Feb 2012 00:55:17 +0100
+Subject: [PATCH 05/16] set /system/etc/init.d/* permissions
+
+ported from CM7
+
+[@AgentFabulous]
+- Adapt for q-preview upstream
+
+Change-Id: I279d78679f7d779d6cd6bbc6c834d94706937ae8
+Signed-off-by: Kshitij Gupta <kshitijgm@gmail.com>
+---
+ libcutils/fs_config.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/libcutils/fs_config.cpp b/libcutils/fs_config.cpp
+index 6217bc8..83d47fa 100644
+--- a/libcutils/fs_config.cpp
++++ b/libcutils/fs_config.cpp
+@@ -219,6 +219,7 @@ static const struct fs_path_config android_files[] = {
+     { 00755, AID_ROOT,      AID_SHELL,     0, "product/bin/*" },
+     { 00750, AID_ROOT,      AID_SHELL,     0, "sbin/*" },
+     { 00755, AID_ROOT,      AID_SHELL,     0, "system/bin/*" },
++    { 00755, AID_ROOT,      AID_SHELL,     0, "system/etc/init.d/*" },
+     { 00755, AID_ROOT,      AID_SHELL,     0, "system/xbin/*" },
+     { 00755, AID_ROOT,      AID_SHELL,     0, "system/apex/*/bin/*" },
+     { 00755, AID_ROOT,      AID_SHELL,     0, "vendor/bin/*" },
+-- 
+2.7.4
+

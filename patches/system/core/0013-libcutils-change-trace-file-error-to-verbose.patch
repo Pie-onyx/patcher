@@ -1,0 +1,61 @@
+From 82c105c8f4494084de0b7887fa8893f4d6f7983e Mon Sep 17 00:00:00 2001
+From: Dan Pasanen <dan.pasanen@gmail.com>
+Date: Sun, 28 Jan 2018 00:10:04 -0600
+Subject: [PATCH 13/16] libcutils: change trace file error to verbose
+
+01-28 00:11:02.535 17466 17466 E cutils-trace: Error opening trace file: No such file or directory (2)
+01-28 00:11:03.875 17485 17485 E cutils-trace: Error opening trace file: No such file or directory (2)
+01-28 00:11:05.612 17505 17505 E cutils-trace: Error opening trace file: No such file or directory (2)
+01-28 00:11:06.890 17524 17524 E cutils-trace: Error opening trace file: No such file or directory (2)
+01-28 00:11:09.351 17543 17543 E cutils-trace: Error opening trace file: No such file or directory (2)
+01-28 00:11:10.876 17563 17563 E cutils-trace: Error opening trace file: No such file or directory (2)
+01-28 00:11:12.371 17582 17582 E cutils-trace: Error opening trace file: No such file or directory (2)
+01-28 00:11:13.792 17602 17602 E cutils-trace: Error opening trace file: No such file or directory (2)
+01-28 00:11:15.883 17622 17622 E cutils-trace: Error opening trace file: No such file or directory (2)
+01-28 00:11:17.163 17641 17641 E cutils-trace: Error opening trace file: No such file or directory (2)
+01-28 00:11:18.651 17660 17660 E cutils-trace: Error opening trace file: No such file or directory (2)
+01-28 00:11:19.922 17679 17679 E cutils-trace: Error opening trace file: No such file or directory (2)
+01-28 00:11:21.854 17698 17698 E cutils-trace: Error opening trace file: No such file or directory (2)
+01-28 00:11:24.923 17725 17725 E cutils-trace: Error opening trace file: No such file or directory (2)
+01-28 00:11:26.324 17744 17744 E cutils-trace: Error opening trace file: No such file or directory (2)
+01-28 00:11:28.422 17763 17763 E cutils-trace: Error opening trace file: No such file or directory (2)
+01-28 00:11:30.402 17782 17782 E cutils-trace: Error opening trace file: No such file or directory (2)
+01-28 00:11:31.690 17801 17801 E cutils-trace: Error opening trace file: No such file or directory (2)
+01-28 00:11:34.071 17820 17820 E cutils-trace: Error opening trace file: No such file or directory (2)
+01-28 00:11:35.853 17840 17840 E cutils-trace: Error opening trace file: No such file or directory (2)
+01-28 00:11:37.133 17862 17862 E cutils-trace: Error opening trace file: No such file or directory (2)
+01-28 00:11:38.622 17881 17881 E cutils-trace: Error opening trace file: No such file or directory (2)
+01-28 00:11:39.871 17900 17900 E cutils-trace: Error opening trace file: No such file or directory (2)
+01-28 00:11:43.342 17926 17926 E cutils-trace: Error opening trace file: No such file or directory (2)
+01-28 00:11:45.150 17946 17946 E cutils-trace: Error opening trace file: No such file or directory (2)
+01-28 00:11:46.922 17965 17965 E cutils-trace: Error opening trace file: No such file or directory (2)
+01-28 00:11:48.191 17984 17984 E cutils-trace: Error opening trace file: No such file or directory (2)
+01-28 00:11:49.473 18003 18003 E cutils-trace: Error opening trace file: No such file or directory (2)
+01-28 00:11:50.860 18022 18022 E cutils-trace: Error opening trace file: No such file or directory (2)
+01-28 00:11:52.204 18041 18041 E cutils-trace: Error opening trace file: No such file or directory (2)
+01-28 00:11:53.497 18060 18060 E cutils-trace: Error opening trace file: No such file or directory (2)
+01-28 00:11:56.483 18087 18087 E cutils-trace: Error opening trace file: No such file or directory (2)
+
+We get it
+
+Change-Id: Ie68a32c3a7e9ab5bb87af2c9289e8fbf3c514d41
+---
+ libcutils/trace-dev.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libcutils/trace-dev.cpp b/libcutils/trace-dev.cpp
+index 4da8215..a558c54 100644
+--- a/libcutils/trace-dev.cpp
++++ b/libcutils/trace-dev.cpp
+@@ -32,7 +32,7 @@ static void atrace_init_once()
+ {
+     atrace_marker_fd = open("/sys/kernel/debug/tracing/trace_marker", O_WRONLY | O_CLOEXEC);
+     if (atrace_marker_fd == -1) {
+-        ALOGE("Error opening trace file: %s (%d)", strerror(errno), errno);
++        ALOGV("Error opening trace file: %s (%d)", strerror(errno), errno);
+         atrace_enabled_tags = 0;
+         goto done;
+     }
+-- 
+2.7.4
+

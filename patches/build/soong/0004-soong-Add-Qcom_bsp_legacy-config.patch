@@ -1,0 +1,37 @@
+From 1422d87d84d1d0bb3204941a501193da3826e46c Mon Sep 17 00:00:00 2001
+From: Christian Oder <myself5@carbonrom.org>
+Date: Wed, 25 Oct 2017 17:56:27 +0200
+Subject: [PATCH 4/8] soong: Add Qcom_bsp_legacy config
+
+Change-Id: Ib9284864e77a18e07f048a4afd26f2da1b6c1485
+---
+ android/variable.go | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/android/variable.go b/android/variable.go
+index 16d7b13..d241689 100644
+--- a/android/variable.go
++++ b/android/variable.go
+@@ -126,6 +126,10 @@ type variableProperties struct {
+ 			Static_libs  []string
+ 			Srcs         []string
+ 		}
++
++		Uses_qcom_bsp_legacy struct {
++			Cflags []string
++		}
+ 	} `android:"arch_variant"`
+ }
+ 
+@@ -287,6 +291,8 @@ type productVariables struct {
+ 	ProductHiddenAPIStubs       []string `json:",omitempty"`
+ 	ProductHiddenAPIStubsSystem []string `json:",omitempty"`
+ 	ProductHiddenAPIStubsTest   []string `json:",omitempty"`
++
++	Uses_qcom_bsp_legacy *bool `json:",omitempty"`
+ }
+ 
+ func boolPtr(v bool) *bool {
+-- 
+2.7.4
+

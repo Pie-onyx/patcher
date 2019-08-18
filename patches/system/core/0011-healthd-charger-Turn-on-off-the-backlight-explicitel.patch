@@ -1,0 +1,67 @@
+From 44460cb8b166a0bf8456fcd58734c5fc4adce981 Mon Sep 17 00:00:00 2001
+From: Chunmei Cai <ccai@codeaurora.org>
+Date: Sun, 6 Sep 2015 15:43:32 +0800
+Subject: [PATCH 11/16] healthd: charger: Turn on/off the backlight explicitely
+
+ * Partial extract from the original commit:
+    healthd: charger: Add board overrides in mode_charger
+    Change-Id: Ic2b7ab6deeb52c4effe3b4af9b590950d5ee97f1
+
+Change-Id: I3b11e8803c0a25dae132f02b64de47e1d292f1e4
+Signed-off-by: Adrian DC <radian.dc@gmail.com>
+
+Former-commit-id: c20351f10a7f309c42dba1e17d1ce2ec8ce6c32c
+---
+ healthd/healthd_mode_charger.cpp | 26 +++++++++++++++++---------
+ 1 file changed, 17 insertions(+), 9 deletions(-)
+
+diff --git a/healthd/healthd_mode_charger.cpp b/healthd/healthd_mode_charger.cpp
+index 2bb5115..d080a44 100644
+--- a/healthd/healthd_mode_charger.cpp
++++ b/healthd/healthd_mode_charger.cpp
+@@ -577,6 +577,7 @@ static void set_next_key_check(charger* charger, key_state* key, int64_t timeout
+ }
+ 
+ static void process_key(charger* charger, int code, int64_t now) {
++    struct animation* batt_anim = charger->batt_anim;
+     key_state* key = &charger->keys[code];
+ 
+     if (code == KEY_POWER) {
+@@ -605,18 +606,25 @@ static void process_key(charger* charger, int code, int64_t now) {
+                  * make sure we wake up at the right-ish time to check
+                  */
+                 set_next_key_check(charger, key, POWER_ON_KEY_TIME);
+-
+-                /* Turn on the display and kick animation on power-key press
+-                 * rather than on key release
+-                 */
+-                kick_animation(charger->batt_anim);
+-                request_suspend(false);
+             }
+         } else {
+-            /* if the power key got released, force screen state cycle */
+             if (key->pending) {
+-                kick_animation(charger->batt_anim);
+-                request_suspend(false);
++                /* If key is pressed when the animation is not running, kick
++                 * the animation and quite suspend; If key is pressed when
++                 * the animation is running, turn off the animation and request
++                 * suspend.
++                 */
++                if (!batt_anim->run) {
++                    kick_animation(batt_anim);
++                    request_suspend(false);
++                } else {
++                    reset_animation(batt_anim);
++                    charger->next_screen_transition = -1;
++                    gr_fb_blank(true);
++                    if (charger->charger_connected) {
++                        request_suspend(true);
++                    }
++                }
+             }
+         }
+     }
+-- 
+2.7.4
+

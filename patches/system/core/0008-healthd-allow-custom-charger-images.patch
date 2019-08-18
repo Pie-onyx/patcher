@@ -1,0 +1,33 @@
+From 6fe1094d29b9eaa8b31ffa22353d805541dc804e Mon Sep 17 00:00:00 2001
+From: Scott Mertz <scott@cyngn.com>
+Date: Sat, 21 Mar 2015 17:33:47 -0700
+Subject: [PATCH 08/16] healthd: allow custom charger images
+
+Change-Id: I1380bea300bfaa6819d50bdc813329c93050286a
+(cherry picked from commit b6ebd65cd36d06daa5cf33f031d7e03b0bd674c6)
+---
+ healthd/Android.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/healthd/Android.mk b/healthd/Android.mk
+index d18f15a..4b095e5 100644
+--- a/healthd/Android.mk
++++ b/healthd/Android.mk
+@@ -202,8 +202,13 @@ include $$(BUILD_PREBUILT)
+ endef
+ 
+ _img_modules :=
++ifeq ($(strip $(BOARD_HEALTHD_CUSTOM_CHARGER_RES)),)
++IMAGES_DIR := images
++else
++IMAGES_DIR := ../../../$(BOARD_HEALTHD_CUSTOM_CHARGER_RES)
++endif
+ _images :=
+-$(foreach _img, $(call find-subdir-subdir-files, "images", "*.png"), \
++$(foreach _img, $(call find-subdir-subdir-files, "$(IMAGES_DIR)", "*.png"), \
+   $(eval $(call _add-charger-image,$(_img))))
+ 
+ include $(CLEAR_VARS)
+-- 
+2.7.4
+

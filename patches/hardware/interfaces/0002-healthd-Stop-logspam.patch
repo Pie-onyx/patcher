@@ -1,0 +1,24 @@
+From 9f3979c4822ddcec757a98000cab452baccdae76 Mon Sep 17 00:00:00 2001
+From: Michael Bestas <mikeioannina@gmail.com>
+Date: Sun, 15 Feb 2015 11:24:05 +0200
+Subject: [PATCH 2/2] healthd: Stop logspam
+
+Change-Id: Ib4a4cb226f61f3e2a4a7c59ca0e0bae47b468d6a
+---
+ health/1.0/default/libhealthd/healthd_board_default.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/health/1.0/default/libhealthd/healthd_board_default.cpp b/health/1.0/default/libhealthd/healthd_board_default.cpp
+index 127f98e..26003ee 100644
+--- a/health/1.0/default/libhealthd/healthd_board_default.cpp
++++ b/health/1.0/default/libhealthd/healthd_board_default.cpp
+@@ -24,5 +24,5 @@ void healthd_board_init(struct healthd_config*)
+ int healthd_board_battery_update(struct android::BatteryProperties*)
+ {
+     // return 0 to log periodic polled battery status to kernel log
+-    return 0;
++    return 1;
+ }
+-- 
+2.7.4
+

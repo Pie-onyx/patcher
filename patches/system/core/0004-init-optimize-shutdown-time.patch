@@ -1,0 +1,38 @@
+From 6575b54f9584f3a38c155e22de0792d684e6db93 Mon Sep 17 00:00:00 2001
+From: zljing <zljing@codeaurora.org>
+Date: Mon, 18 Sep 2017 15:02:08 +0800
+Subject: [PATCH 04/16] init: optimize shutdown time
+
+Android O adds 3 steps for the shutdown sequence, kill services/
+vold shutdown/umount. It need more than 700ms to kill services
+in which bootanimation will be stopped due to zygote died.
+However system turns off backlight at the step "umount" which is
+too late to get screen stuck in different interface. So turn
+off backlight before the step "kill services".
+
+CRs-Fixed: 2111441
+
+Change-Id: Ib397032272de77412a63031afe8c7fc9f9b80ccd
+
+Former-commit-id: 563dc27ca0ca8236cf85f7007928bc28fa1c4e3c
+---
+ init/reboot.cpp | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/init/reboot.cpp b/init/reboot.cpp
+index 5b90969..32eed23 100644
+--- a/init/reboot.cpp
++++ b/init/reboot.cpp
+@@ -466,7 +466,8 @@ static void DoReboot(unsigned int cmd, const std::string& reason, const std::str
+         LOG(INFO) << "Terminating running services took " << t
+                   << " with remaining services:" << service_count;
+     }
+-
++    // turn off backlight before killing services to avoid screen stuck
++    TurnOffBacklight();  // this part can take time. save power.
+     // minimum safety steps before restarting
+     // 2. kill all services except ones that are necessary for the shutdown sequence.
+     for (const auto& s : ServiceList::GetInstance().services_in_shutdown_order()) {
+-- 
+2.7.4
+

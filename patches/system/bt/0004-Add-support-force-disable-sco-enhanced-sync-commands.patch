@@ -1,0 +1,63 @@
+From 6db0f81bf515b7cd8200fc3b55a32c2f597724cf Mon Sep 17 00:00:00 2001
+From: Billchen1977 <billchen1977@gmail.com>
+Date: Thu, 28 Sep 2017 18:00:18 +0530
+Subject: [PATCH 4/4] Add support force disable sco enhanced sync commands
+
+Change-Id: I04c73d723d50c2f619102e1904b05937a77d0103
+---
+ device/src/controller.cc     | 9 +++++++++
+ internal_include/bt_target.h | 5 +++++
+ 2 files changed, 14 insertions(+)
+
+diff --git a/device/src/controller.cc b/device/src/controller.cc
+index 05606d6..9444939 100644
+--- a/device/src/controller.cc
++++ b/device/src/controller.cc
+@@ -22,6 +22,7 @@
+ 
+ #include <base/logging.h>
+ 
++#include "bt_target.h"
+ #include "bt_types.h"
+ #include "btcore/include/event_mask.h"
+ #include "btcore/include/module.h"
+@@ -383,12 +384,20 @@ static bool supports_master_slave_role_switch(void) {
+ 
+ static bool supports_enhanced_setup_synchronous_connection(void) {
+   assert(readable);
++#if (BTM_SCO_ENHANCED_SYNC_DISABLED == TRUE)
++  return false;
++#else
+   return HCI_ENH_SETUP_SYNCH_CONN_SUPPORTED(supported_commands);
++#endif
+ }
+ 
+ static bool supports_enhanced_accept_synchronous_connection(void) {
+   assert(readable);
++#if (BTM_SCO_ENHANCED_SYNC_DISABLED == TRUE)
++  return false;
++#else
+   return HCI_ENH_ACCEPT_SYNCH_CONN_SUPPORTED(supported_commands);
++#endif
+ }
+ 
+ static bool supports_ble(void) {
+diff --git a/internal_include/bt_target.h b/internal_include/bt_target.h
+index 67a67c5..3b03aee 100644
+--- a/internal_include/bt_target.h
++++ b/internal_include/bt_target.h
+@@ -286,6 +286,11 @@
+ #define BTM_DISC_DURING_RS TRUE
+ #endif
+ 
++/* Disables Sco Enhanced Absent on pre-Oreo bluetooth Firmware */
++#ifndef BTM_SCO_ENHANCED_SYNC_DISABLED
++#define BTM_SCO_ENHANCED_SYNC_DISABLED FALSE
++#endif
++
+ /**************************
+  * Initial SCO TX credit
+  ************************/
+-- 
+2.7.4
+

@@ -1,0 +1,47 @@
+From 32f7057761475b3c3481a7cf621529c919b8b2b0 Mon Sep 17 00:00:00 2001
+From: Koushik Dutta <koushd@gmail.com>
+Date: Sat, 26 Jun 2010 22:53:55 -0700
+Subject: [PATCH 05/44] add support for overriding build.prop settings.
+
+[@AgentFabulous - POSP]
+- Adapt for the following change:
+https://android.googlesource.com/platform/build/+/13ea2a6a7daefe4e691e91930821c60b7f81702b
+
+Change-Id: Ie4224d608b7bcb0c2087bd77bc954f8f5f9b6495
+Signed-off-by: Kshitij Gupta <kshitijgm@gmail.com>
+---
+ core/Makefile   | 1 +
+ core/product.mk | 5 +++++
+ 2 files changed, 6 insertions(+)
+
+diff --git a/core/Makefile b/core/Makefile
+index 7c3f874..cd08443 100644
+--- a/core/Makefile
++++ b/core/Makefile
+@@ -465,6 +465,7 @@ endif
+ 	        TARGET_CPU_ABI_LIST_64_BIT="$(TARGET_CPU_ABI_LIST_64_BIT)" \
+ 	        TARGET_CPU_ABI="$(TARGET_CPU_ABI)" \
+ 	        TARGET_CPU_ABI2="$(TARGET_CPU_ABI2)" \
++	        $(PRODUCT_BUILD_PROP_OVERRIDES) \
+ 	        bash $(BUILDINFO_SH) >> $@
+ 	$(hide) $(foreach file,$(system_prop_file), \
+ 	    if [ -f "$(file)" ]; then \
+diff --git a/core/product.mk b/core/product.mk
+index 29bd1d1..f58c8da 100644
+--- a/core/product.mk
++++ b/core/product.mk
+@@ -157,6 +157,11 @@ _product_var_list += PRODUCT_PRODUCT_SERVICES_PROPERTIES
+ _product_var_list += PRODUCT_ODM_PROPERTIES
+ _product_var_list += PRODUCT_CHARACTERISTICS
+ 
++# A list of property assignments, like "key = value", with zero or more
++# whitespace characters on either side of the '='.
++# used for overriding properties in build.prop
++_product_var_list += PRODUCT_BUILD_PROP_OVERRIDES
++
+ # A list of words like <source path>:<destination path>[:<owner>].
+ # The file at the source path should be copied to the destination path
+ # when building  this product.  <destination path> is relative to
+-- 
+2.7.4
+

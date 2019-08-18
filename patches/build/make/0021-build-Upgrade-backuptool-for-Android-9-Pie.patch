@@ -1,0 +1,26 @@
+From 865c3d72791f7684072c2e08bafe97e497ab0d23 Mon Sep 17 00:00:00 2001
+From: Adrian DC <radian.dc@gmail.com>
+Date: Fri, 24 Aug 2018 20:41:14 +0200
+Subject: [PATCH 21/44] build: Upgrade backuptool for Android 9 Pie
+
+Change-Id: Ibe7a6e19adf0d8a6b3a60326e06a1f518ad6f352
+---
+ tools/releasetools/ota_from_target_files.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/releasetools/ota_from_target_files.py b/tools/releasetools/ota_from_target_files.py
+index a73b23b..d6d554e 100755
+--- a/tools/releasetools/ota_from_target_files.py
++++ b/tools/releasetools/ota_from_target_files.py
+@@ -245,7 +245,7 @@ OPTIONS.output_metadata_path = None
+ OPTIONS.override_device = 'auto'
+ OPTIONS.backuptool = False
+ 
+-BACKUPTOOL_VERSION = '8.'
++BACKUPTOOL_VERSION = '9'
+ 
+ METADATA_NAME = 'META-INF/com/android/metadata'
+ POSTINSTALL_CONFIG = 'META/postinstall_config.txt'
+-- 
+2.7.4
+

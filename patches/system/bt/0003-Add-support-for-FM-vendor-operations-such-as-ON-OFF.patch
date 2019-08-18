@@ -1,0 +1,32 @@
+From 86878776d3640755658faca955344733b7ee3ca9 Mon Sep 17 00:00:00 2001
+From: Satish kumar sugasi <ssugas@codeaurora.org>
+Date: Thu, 17 Dec 2015 12:26:03 -0800
+Subject: [PATCH 3/4] Add support for FM vendor operations such as ON/OFF
+
+This adds FM ON/OFF and HCI init operations
+
+Change-Id: I476a8017343f9bc8dd8f30cc5ce14c8d05515caf
+---
+ hci/include/bt_vendor_lib.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/hci/include/bt_vendor_lib.h b/hci/include/bt_vendor_lib.h
+index a274af7..a6ee9dd 100644
+--- a/hci/include/bt_vendor_lib.h
++++ b/hci/include/bt_vendor_lib.h
+@@ -198,6 +198,12 @@ typedef enum {
+    */
+   BT_VND_OP_A2DP_OFFLOAD_STOP,
+ 
++  FM_VND_OP_POWER_CTRL,
++
++  BT_VND_OP_FM_USERIAL_OPEN,
++
++  BT_VND_OP_FM_USERIAL_CLOSE,
++
+ } bt_vendor_opcode_t;
+ 
+ /** Power on/off control states */
+-- 
+2.7.4
+

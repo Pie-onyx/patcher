@@ -1,0 +1,35 @@
+From 916b1778b5e6e8438838ea9b8888eb18278e8ad7 Mon Sep 17 00:00:00 2001
+From: Park Ju Hyung <qkrwngud825@gmail.com>
+Date: Wed, 14 Dec 2016 22:38:49 +0900
+Subject: [PATCH] Do not limit threads upon calling legacy GNU make
+
+Limiting legacy GNU make and making ninja run faster might sound ok,
+but on Android, huge amount of time is still being spent on GNU make.
+
+For example :
+limiting the threads to half causes huge slowdown to inline kernel builds.
+
+Unlock this limit and allow GNU make to fully utilize all CPU cores.
+
+Change-Id: Iacdcaac844c0e2d15830f5d96f8f8a3bd9f6ca5b
+Signed-off-by: Park Ju Hyung <qkrwngud825@gmail.com>
+---
+ main.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/main.cc b/main.cc
+index f2360cf..e14f0bc 100644
+--- a/main.cc
++++ b/main.cc
+@@ -98,7 +98,7 @@ static void ReadBootstrapMakefile(const vector<Symbol>& targets,
+   }
+   if (g_flags.generate_ninja) {
+     bootstrap += StringPrintf("MAKE?=make -j%d\n",
+-                              g_flags.num_jobs <= 1 ? 1 : g_flags.num_jobs / 2);
++                              g_flags.num_jobs <= 1 ? 1 : g_flags.num_jobs);
+   } else {
+     bootstrap += StringPrintf("MAKE?=%s\n",
+                               JoinStrings(g_flags.subkati_args, " ").c_str());
+-- 
+2.7.4
+

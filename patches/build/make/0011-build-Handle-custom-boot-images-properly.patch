@@ -1,0 +1,39 @@
+From 806e1e1c5cf1006f197d0fa89dd26247ecc4a0b1 Mon Sep 17 00:00:00 2001
+From: "Brint E. Kriebel" <bekit@cyngn.com>
+Date: Wed, 13 Aug 2014 12:27:38 -0700
+Subject: [PATCH 11/44] build: Handle custom boot images properly
+
+When a pre-built image should be used, it should be stored in the
+target files zip so that it can be used with external signing
+processes.
+
+[@AgentFabulous - POSP]
+- Adapt for q-preview-1
+
+Original-Change-Id: I2661af9ac58af30bb9314b552775046d3abf44e0
+Change-Id: I10b3bd0bb33489b8ffb26d16d002f8dd6ff405ad
+Signed-off-by: Kshitij Gupta <kshitijgm@gmail.com>
+---
+ core/Makefile | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/core/Makefile b/core/Makefile
+index 061f6bd..dad6964 100644
+--- a/core/Makefile
++++ b/core/Makefile
+@@ -3897,6 +3897,12 @@ ifdef BUILDING_VENDOR_IMAGE
+ 	$(hide) $(call package_files-copy-root, \
+ 	    $(TARGET_OUT_VENDOR),$(zip_root)/VENDOR)
+ endif
++ifdef BOARD_CUSTOM_BOOTIMG
++	@# Prebuilt boot images
++	$(hide) mkdir -p $(zip_root)/BOOTABLE_IMAGES
++	$(hide) $(ACP) $(INSTALLED_BOOTIMAGE_TARGET) $(zip_root)/BOOTABLE_IMAGES/
++	$(hide) $(ACP) $(INSTALLED_RECOVERYIMAGE_TARGET) $(zip_root)/BOOTABLE_IMAGES/
++endif
+ ifdef BUILDING_PRODUCT_IMAGE
+ 	@# Contents of the product image
+ 	$(hide) $(call package_files-copy-root, \
+-- 
+2.7.4
+
