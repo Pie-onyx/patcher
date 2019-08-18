@@ -1,7 +1,7 @@
-From 32f7057761475b3c3481a7cf621529c919b8b2b0 Mon Sep 17 00:00:00 2001
+From f4a532644d1eefc246eaa88117dab7abcd277ac8 Mon Sep 17 00:00:00 2001
 From: Koushik Dutta <koushd@gmail.com>
 Date: Sat, 26 Jun 2010 22:53:55 -0700
-Subject: [PATCH 05/44] add support for overriding build.prop settings.
+Subject: [PATCH 05/45] add support for overriding build.prop settings.
 
 [@AgentFabulous - POSP]
 - Adapt for the following change:

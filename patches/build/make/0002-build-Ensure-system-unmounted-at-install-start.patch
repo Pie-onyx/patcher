@@ -1,7 +1,7 @@
-From 02b2208a30430a36e692224100ccff6bfe015e47 Mon Sep 17 00:00:00 2001
+From 988ddeb87d42bd64d6a3caf72110127248fc9cd5 Mon Sep 17 00:00:00 2001
 From: Matt Mower <mowerm@gmail.com>
 Date: Fri, 21 Nov 2014 00:46:52 -0600
-Subject: [PATCH 02/44] build: Ensure /system unmounted at install start
+Subject: [PATCH 02/45] build: Ensure /system unmounted at install start
 
 Account for the possibility that a user has mounted system manually
 before installing the FullOTA package.

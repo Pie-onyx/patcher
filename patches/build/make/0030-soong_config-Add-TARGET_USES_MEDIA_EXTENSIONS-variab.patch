@@ -1,0 +1,30 @@
+From d10e17dff80117b4116043b9823d9b30c42fb8d5 Mon Sep 17 00:00:00 2001
+From: Adrian DC <radian.dc@gmail.com>
+Date: Mon, 24 Jul 2017 14:05:30 +0200
+Subject: [PATCH 30/45] soong_config: Add TARGET_USES_MEDIA_EXTENSIONS variable
+
+ * Soong product variable 'uses_media_extensions'
+
+ * Forward-port to AOSP P
+
+Change-Id: I4bc48b5a9ac35c12734698804d2a64c0603b6515
+Signed-off-by: Adrian DC <radian.dc@gmail.com>
+---
+ core/soong_config.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/core/soong_config.mk b/core/soong_config.mk
+index c69c744..fe09746 100644
+--- a/core/soong_config.mk
++++ b/core/soong_config.mk
+@@ -103,6 +103,7 @@ $(call add_json_list, CoveragePaths,                     $(COVERAGE_PATHS))
+ $(call add_json_list, CoverageExcludePaths,              $(COVERAGE_EXCLUDE_PATHS))
+ 
+ $(call add_json_bool, Has_legacy_camera_hal1,            $(filter true,$(if $(filter true,$(TARGET_HAS_LEGACY_CAMERA_HAL1)),true,false)))
++$(call add_json_bool, Uses_media_extensions,             $(filter true,$(if $(filter true,$(TARGET_USES_MEDIA_EXTENSIONS)),true,false)))
+ 
+ $(call add_json_bool, ArtUseReadBarrier,                 $(call invert_bool,$(filter false,$(PRODUCT_ART_USE_READ_BARRIER))))
+ $(call add_json_bool, Binder32bit,                       $(BINDER32BIT))
+-- 
+2.7.4
+

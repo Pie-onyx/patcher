@@ -1,0 +1,32 @@
+From d4674a0c1126be6372d621703c1a60077e0ff8a8 Mon Sep 17 00:00:00 2001
+From: Adrian DC <radian.dc@gmail.com>
+Date: Sun, 18 Feb 2018 13:37:26 +0100
+Subject: [PATCH 29/45] soong_config: Add TARGET_HAS_LEGACY_CAMERA_HAL1
+ variable
+
+ * Soong product variable 'has_legacy_camera_hal1'
+
+ * Forward-port to AOSP P
+
+Change-Id: I41da5ccfb11949c9251f21d80ded0ecf0f00166a
+Signed-off-by: Adrian DC <radian.dc@gmail.com>
+---
+ core/soong_config.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/core/soong_config.mk b/core/soong_config.mk
+index 0275de6..c69c744 100644
+--- a/core/soong_config.mk
++++ b/core/soong_config.mk
+@@ -102,6 +102,8 @@ $(call add_json_bool, NativeCoverage,                    $(filter true,$(NATIVE_
+ $(call add_json_list, CoveragePaths,                     $(COVERAGE_PATHS))
+ $(call add_json_list, CoverageExcludePaths,              $(COVERAGE_EXCLUDE_PATHS))
+ 
++$(call add_json_bool, Has_legacy_camera_hal1,            $(filter true,$(if $(filter true,$(TARGET_HAS_LEGACY_CAMERA_HAL1)),true,false)))
++
+ $(call add_json_bool, ArtUseReadBarrier,                 $(call invert_bool,$(filter false,$(PRODUCT_ART_USE_READ_BARRIER))))
+ $(call add_json_bool, Binder32bit,                       $(BINDER32BIT))
+ $(call add_json_str,  BtConfigIncludeDir,                $(BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR))
+-- 
+2.7.4
+

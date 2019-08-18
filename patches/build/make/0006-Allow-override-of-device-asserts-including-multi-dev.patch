@@ -1,7 +1,7 @@
-From e74a3715744f1dc84733ac18cc1a8ced8052f6c3 Mon Sep 17 00:00:00 2001
+From f1614f909f58a416995ee1592b41789d0ec51e96 Mon Sep 17 00:00:00 2001
 From: Steve Kondik <shade@chemlab.org>
 Date: Wed, 21 Apr 2010 11:39:48 -0400
-Subject: [PATCH 06/44] Allow override of device asserts, including
+Subject: [PATCH 06/45] Allow override of device asserts, including
  multi-device support.
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8

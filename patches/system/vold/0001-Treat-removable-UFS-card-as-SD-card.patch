@@ -1,0 +1,36 @@
+From 364b059c2b0bd227fb36f75c9d00353cf2781758 Mon Sep 17 00:00:00 2001
+From: Subhash Jadavani <subhashj@codeaurora.org>
+Date: Thu, 6 Jul 2017 15:53:24 -0700
+Subject: [PATCH 1/7] Treat removable UFS card as SD card
+
+Removable UFS cards are alternative to SD cards and they are detected as
+SCSI block devices. Currently these cards shows up "USB disk" as we
+consider anything other than SD card as USB disks. As both UFS cards
+and USB disks are SCSI block devices, we can't differentiate between
+USB disks and UFS cards by MAJOR number of block device. This change
+looks for "ufs" string in DEVPATH parameter of uevent to detect if it
+is UFS card or not and treat it as SD card.
+
+Change-Id: I88534190d0610ced515c8c3e53aaae1a49480fbf
+---
+ VolumeManager.cpp | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/VolumeManager.cpp b/VolumeManager.cpp
+index 897c2a8..05614a5 100644
+--- a/VolumeManager.cpp
++++ b/VolumeManager.cpp
+@@ -203,7 +203,9 @@ void VolumeManager::handleBlockEvent(NetlinkEvent* evt) {
+                     // emulator-specific; see Disk.cpp for details) devices are SD,
+                     // and that everything else is USB
+                     int flags = source->getFlags();
+-                    if (major == kMajorBlockMmc || (android::vold::IsRunningInEmulator() &&
++                    if (major == kMajorBlockMmc ||
++                            (eventPath.find("ufs") != std::string::npos) ||
++                            (android::vold::IsRunningInEmulator() &&
+                                                     major >= (int)kMajorBlockExperimentalMin &&
+                                                     major <= (int)kMajorBlockExperimentalMax)) {
+                         flags |= android::vold::Disk::Flags::kSd;
+-- 
+2.7.4
+

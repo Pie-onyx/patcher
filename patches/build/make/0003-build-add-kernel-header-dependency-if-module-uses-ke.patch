@@ -1,7 +1,7 @@
-From 5863743883d68a27d371c23d917b2282aaba56a3 Mon Sep 17 00:00:00 2001
+From 3a01e336b1e907c0e722b4f921af23ebae77e610 Mon Sep 17 00:00:00 2001
 From: Scott Mertz <scott@cyngn.com>
 Date: Wed, 1 Jun 2016 13:40:25 -0700
-Subject: [PATCH 03/44] build: add kernel header dependency if module uses
+Subject: [PATCH 03/45] build: add kernel header dependency if module uses
  kernel headers
 
 Many of the QCOM components use kernel headers, but don't declare

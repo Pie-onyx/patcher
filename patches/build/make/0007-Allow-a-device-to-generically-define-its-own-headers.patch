@@ -1,7 +1,7 @@
-From badcab2e09c09247364a95766ba0db5c83f9262c Mon Sep 17 00:00:00 2001
+From c81535998d6e8192547dbfba43fbf11dd3bfc9f7 Mon Sep 17 00:00:00 2001
 From: Ricardo Cerqueira <cyanogenmod@cerqueira.org>
 Date: Tue, 12 Apr 2011 10:57:22 +0100
-Subject: [PATCH 07/44] Allow a device to generically define its own headers
+Subject: [PATCH 07/45] Allow a device to generically define its own headers
 
 We have a few cases of devices including specific versions of projects
 just because of modified headers (msm_mdp.h comes to mind), and I just

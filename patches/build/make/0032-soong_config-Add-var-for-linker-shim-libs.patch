@@ -1,0 +1,50 @@
+From debbe8c97fe82bc3305ef8bd8de7c05dccd6f633 Mon Sep 17 00:00:00 2001
+From: Paul Keith <javelinanddart@gmail.com>
+Date: Thu, 15 Feb 2018 21:46:00 +0100
+Subject: [PATCH 32/45] soong_config: Add var for linker shim libs
+
+* To limit security exposure, we're forcing all devices
+  to define shim libs with a TARGET_LD_SHIM_LIBS
+
+Author: Stricted <info@stricted.net>
+Date:   Sat Feb 17 17:28:52 2018 +0100
+
+    soong_config: Replace space with colon on TARGET_LD_SHIM_LIBS
+
+    that way we can split the shim list logically into multiple lines like
+
+    TARGET_LD_SHIM_LIBS := /system/bin/gpsd|/vendor/lib/libshim_gpsd.so \
+        /system/lib/libexynoscamera.so|/vendor/lib/libexynoscamera_shim.so \
+        /system/lib/libstagefright.so|/system/lib/libstagefright_shim.so
+
+    to not have one single huge line
+
+    Change-Id: Ice1411ee22b78da1dbf22eac412b9e4978acebdf
+
+Author: Adrian DC <radian.dc@gmail.com>
+Date:   Thu Mar 8 22:34:14 2018 +0100
+
+    soong: Forward-port to AOSP P
+
+    Change-Id: Ibec6ec41ff0ab2c67a81cbfd52cf71acbddafd32
+
+Change-Id: Ic8722c42807429f2faa3546316c71c40533ce195
+---
+ core/soong_config.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/core/soong_config.mk b/core/soong_config.mk
+index 5adf738..baafb8a 100644
+--- a/core/soong_config.mk
++++ b/core/soong_config.mk
+@@ -103,6 +103,7 @@ $(call add_json_list, CoveragePaths,                     $(COVERAGE_PATHS))
+ $(call add_json_list, CoverageExcludePaths,              $(COVERAGE_EXCLUDE_PATHS))
+ 
+ $(call add_json_bool, Has_legacy_camera_hal1,            $(filter true,$(if $(filter true,$(TARGET_HAS_LEGACY_CAMERA_HAL1)),true,false)))
++$(call add_json_str,  Target_shim_libs,                  $(subst $(space),:,$(TARGET_LD_SHIM_LIBS)))
+ $(call add_json_bool, Uses_media_extensions,             $(filter true,$(if $(filter true,$(TARGET_USES_MEDIA_EXTENSIONS)),true,false)))
+ $(call add_json_bool, Uses_qcom_bsp_legacy,              $(filter true,$(if $(filter msm7x27a msm7x30 msm8660 msm8960,$(TARGET_BOARD_PLATFORM)),true,false)))
+ 
+-- 
+2.7.4
+

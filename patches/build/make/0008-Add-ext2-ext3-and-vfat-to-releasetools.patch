@@ -1,7 +1,7 @@
-From a63ee96c95d3044da1398d6bc60ac54581f188b5 Mon Sep 17 00:00:00 2001
+From c9a46ed4beee5688e2f0c44ddb36800876594139 Mon Sep 17 00:00:00 2001
 From: Brandon Bennett <bennetb@gmail.com>
 Date: Sat, 19 Nov 2011 16:02:04 -0700
-Subject: [PATCH 08/44] Add ext2, ext3, and vfat to releasetools
+Subject: [PATCH 08/45] Add ext2, ext3, and vfat to releasetools
 
 Support some non-standard partition that may be found in recovery.fstab
 

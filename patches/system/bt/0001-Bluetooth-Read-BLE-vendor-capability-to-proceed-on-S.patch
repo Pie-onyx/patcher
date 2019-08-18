@@ -1,7 +1,7 @@
 From 9d6570b1ad4893faaf02d4ba52e893952873aac8 Mon Sep 17 00:00:00 2001
 From: Srinu Jella <sjella@codeaurora.org>
 Date: Mon, 24 Aug 2015 21:00:28 +0530
-Subject: [PATCH 1/4] Bluetooth: Read BLE vendor capability to proceed on
+Subject: [PATCH 1/6] Bluetooth: Read BLE vendor capability to proceed on
  Secure conn
 
 - Read BLE vendor capability to proceed on enablement of

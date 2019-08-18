@@ -1,7 +1,7 @@
 From 6db0f81bf515b7cd8200fc3b55a32c2f597724cf Mon Sep 17 00:00:00 2001
 From: Billchen1977 <billchen1977@gmail.com>
 Date: Thu, 28 Sep 2017 18:00:18 +0530
-Subject: [PATCH 4/4] Add support force disable sco enhanced sync commands
+Subject: [PATCH 4/6] Add support force disable sco enhanced sync commands
 
 Change-Id: I04c73d723d50c2f619102e1904b05937a77d0103
 ---

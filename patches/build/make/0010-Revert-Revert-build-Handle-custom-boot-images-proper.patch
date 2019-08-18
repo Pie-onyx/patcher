@@ -1,0 +1,36 @@
+From 53d876bd4894522e433c07f1b84a42e3bb4cad57 Mon Sep 17 00:00:00 2001
+From: "Brint E. Kriebel" <bekit@cyngn.com>
+Date: Mon, 23 Feb 2015 00:38:24 +0000
+Subject: [PATCH 10/45] Revert "Revert "build: Handle custom boot images
+ properly""
+
+This is still needed, per this discussion here:
+http://review.cyanogenmod.org/#/c/76919/
+
+This reverts commit 78d216bc157021e111a31a6606622cef4b9d383d.
+
+Change-Id: If494c2c6468185bc0e10cdb92847a9f8429b79c4
+---
+ core/Makefile | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/core/Makefile b/core/Makefile
+index 3709025..5cbcebb 100644
+--- a/core/Makefile
++++ b/core/Makefile
+@@ -3864,6 +3864,12 @@ ifdef BUILDING_USERDATA_IMAGE
+ 	$(hide) $(call package_files-copy-root, \
+ 	    $(TARGET_OUT_DATA),$(zip_root)/DATA)
+ endif
++ifdef BOARD_CUSTOM_BOOTIMG
++	@# Prebuilt boot images
++	$(hide) mkdir -p $(zip_root)/BOOTABLE_IMAGES
++	$(hide) $(ACP) $(INSTALLED_BOOTIMAGE_TARGET) $(zip_root)/BOOTABLE_IMAGES/
++	$(hide) $(ACP) $(INSTALLED_RECOVERYIMAGE_TARGET) $(zip_root)/BOOTABLE_IMAGES/
++endif
+ ifdef BUILDING_VENDOR_IMAGE
+ 	@# Contents of the vendor image
+ 	$(hide) $(call package_files-copy-root, \
+-- 
+2.7.4
+

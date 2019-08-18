@@ -1,0 +1,38 @@
+From 5a462aa139fd81b6568a7af8ba1fff711110add5 Mon Sep 17 00:00:00 2001
+From: Kshitij Gupta <kshitijgm@gmail.com>
+Date: Fri, 16 Aug 2019 16:53:48 +0530
+Subject: [PATCH] runtime: Disable hiddenapi validation
+
+- I'm just lazy lol
+
+Change-Id: I343ad9d323d027f1f03263ac1b5d985b4c0b0c5f
+Signed-off-by: Kshitij Gupta <kshitijgm@gmail.com>
+---
+ runtime/art_method.cc | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/runtime/art_method.cc b/runtime/art_method.cc
+index c07efba..830eebe 100644
+--- a/runtime/art_method.cc
++++ b/runtime/art_method.cc
+@@ -706,7 +706,6 @@ void ArtMethod::SetIntrinsic(uint32_t intrinsic) {
+     bool is_default_conflict = IsDefaultConflicting();
+     bool is_compilable = IsCompilable();
+     bool must_count_locks = MustCountLocks();
+-    uint32_t hiddenapi_flags = hiddenapi::GetRuntimeFlags(this);
+     SetAccessFlags(new_value);
+     DCHECK_EQ(java_flags, (GetAccessFlags() & kAccJavaFlagsMask));
+     DCHECK_EQ(is_constructor, IsConstructor());
+@@ -726,9 +725,6 @@ void ArtMethod::SetIntrinsic(uint32_t intrinsic) {
+     // these because (a) warnings on greylist do not change semantics, and
+     // (b) only VarHandle intrinsics are blacklisted at the moment and they
+     // should not be used outside tests with disabled API checks.
+-    if ((hiddenapi_flags & kAccHiddenapiBits) != kAccPublicApi) {
+-      DCHECK_EQ(hiddenapi_flags, hiddenapi::GetRuntimeFlags(this)) << PrettyMethod();
+-    }
+   } else {
+     SetAccessFlags(new_value);
+   }
+-- 
+2.7.4
+

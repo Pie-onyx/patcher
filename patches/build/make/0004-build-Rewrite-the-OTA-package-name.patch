@@ -1,7 +1,7 @@
-From aaae4bf6da8d89b5b968467ff846b2f74ca908b8 Mon Sep 17 00:00:00 2001
+From 0fcb6869ab0f190ef03e9d83bb32b90cda45b27d Mon Sep 17 00:00:00 2001
 From: Adrian DC <radian.dc@gmail.com>
 Date: Fri, 21 Apr 2017 19:50:56 +0200
-Subject: [PATCH 04/44] build: Rewrite the OTA package name
+Subject: [PATCH 04/45] build: Rewrite the OTA package name
 
  * Result example:
     aosp-7.1-20161023-huashan-adriandc.zip

@@ -1,7 +1,7 @@
 From 86878776d3640755658faca955344733b7ee3ca9 Mon Sep 17 00:00:00 2001
 From: Satish kumar sugasi <ssugas@codeaurora.org>
 Date: Thu, 17 Dec 2015 12:26:03 -0800
-Subject: [PATCH 3/4] Add support for FM vendor operations such as ON/OFF
+Subject: [PATCH 3/6] Add support for FM vendor operations such as ON/OFF
 
 This adds FM ON/OFF and HCI init operations
 

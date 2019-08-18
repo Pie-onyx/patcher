@@ -1,0 +1,26 @@
+From 69cb38b2ead151c3b7dcc24c1c5eaa743e7a899b Mon Sep 17 00:00:00 2001
+From: Kshitij Gupta <kshitijgm@gmail.com>
+Date: Fri, 16 Aug 2019 16:59:05 +0530
+Subject: [PATCH] f2fs: Compile with -Wno-string-plus-int
+
+Change-Id: I04ec0ab65ca98271f31f791b3394bccef93615da
+Signed-off-by: Kshitij Gupta <kshitijgm@gmail.com>
+---
+ Android.bp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Android.bp b/Android.bp
+index 45d60ed..42abc49 100644
+--- a/Android.bp
++++ b/Android.bp
+@@ -16,6 +16,7 @@ cc_defaults {
+         "-Wno-pointer-arith",
+         "-Wno-sign-compare",
+         "-Wno-unused-function",
++        "-Wno-string-plus-int",
+     ],
+     local_include_dirs: [
+         "include",
+-- 
+2.7.4
+
