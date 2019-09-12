@@ -3,8 +3,7 @@
 ROOT="${PWD}"
 
 REPOSITORIES=(
-    'cts'
-    'packages/services/Telephony'
+    'frameworks/base'
 )
 
 for repository in "${REPOSITORIES[@]}"; do

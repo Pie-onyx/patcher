@@ -1,0 +1,122 @@
+From 30a65ff3a65124ae76e4ac30b7f07823e1575514 Mon Sep 17 00:00:00 2001
+From: Danny Baumann <dannybaumann@web.de>
+Date: Thu, 18 May 2017 14:00:39 +0200
+Subject: [PATCH 1/3] Add support for page theme color to WebView and
+ WebChromeClient.
+
+Will only be implemented by system WebView, so users will have to call
+the isThemeColorSupported() method in order to check whether the current
+WebView implementation supports this.
+
+Change-Id: Iaf4c3b8e4b8b7d8a74303b32d1c17c836dc744da
+(cherry picked from commit 8a47a2fe906b56d1b49041d12faeba0a48c0f3d5)
+---
+ core/java/android/webkit/WebChromeClient.java |  9 ++++
+ core/java/android/webkit/WebView.java         | 43 +++++++++++++++++++
+ 2 files changed, 52 insertions(+)
+
+diff --git a/core/java/android/webkit/WebChromeClient.java b/core/java/android/webkit/WebChromeClient.java
+index 95fe963d789..e0365dd7661 100644
+--- a/core/java/android/webkit/WebChromeClient.java
++++ b/core/java/android/webkit/WebChromeClient.java
+@@ -58,6 +58,15 @@ public class WebChromeClient {
+     public void onReceivedTouchIconUrl(WebView view, String url,
+             boolean precomposed) {}
+ 
++    /**
++     * Notify the host application of a new theme color.
++     * @param view The WebView that initiated the callback.
++     * @param color The newly set theme color, which may be partially transparent.
++     *              A value of Color.TRANSPARENT denotes no theme color being set.
++     * @hide
++     */
++    public void onThemeColorChanged(WebView view, int color) {}
++
+     /**
+      * A callback interface used by the host application to notify
+      * the current page that its custom view has been dismissed.
+diff --git a/core/java/android/webkit/WebView.java b/core/java/android/webkit/WebView.java
+index 14be73dec41..dbf1db38339 100644
+--- a/core/java/android/webkit/WebView.java
++++ b/core/java/android/webkit/WebView.java
+@@ -29,6 +29,7 @@ import android.content.pm.PackageInfo;
+ import android.content.res.Configuration;
+ import android.graphics.Bitmap;
+ import android.graphics.Canvas;
++import android.graphics.Color;
+ import android.graphics.Paint;
+ import android.graphics.Picture;
+ import android.graphics.Rect;
+@@ -69,6 +70,8 @@ import java.io.BufferedWriter;
+ import java.io.File;
+ import java.lang.annotation.Retention;
+ import java.lang.annotation.RetentionPolicy;
++import java.lang.reflect.InvocationTargetException;
++import java.lang.reflect.Method;
+ import java.util.List;
+ import java.util.Map;
+ import java.util.concurrent.Executor;
+@@ -114,6 +117,8 @@ public class WebView extends AbsoluteLayout
+     @UnsupportedAppUsage
+     private static volatile boolean sEnforceThreadChecking = false;
+ 
++    private Method mGetThemeColorMethod;
++
+     /**
+      *  Transportation object for returning WebView across thread boundaries.
+      */
+@@ -426,6 +431,13 @@ public class WebView extends AbsoluteLayout
+         checkThread();
+ 
+         ensureProviderCreated();
++
++        try {
++            mGetThemeColorMethod = mProvider.getClass().getMethod("getThemeColor");
++        } catch (Exception e) {
++            // ignored, no theme color support
++        }
++
+         mProvider.init(javaScriptInterfaces, privateBrowsing);
+         // Post condition of creating a webview is the CookieSyncManager.getInstance() is allowed.
+         CookieSyncManager.setGetInstanceIsAllowed();
+@@ -1313,6 +1325,37 @@ public class WebView extends AbsoluteLayout
+         return mProvider.getProgress();
+     }
+ 
++    /**
++     * Checks whether the WebView implementation has support for fetching
++     * the theme color set by the page.
++     *
++     * @return true if the WebView supports the getThemeColor() method
++     * @hide
++     */
++    public boolean isThemeColorSupported() {
++        return mGetThemeColorMethod != null;
++    }
++
++    /**
++     * Gets the theme color set by the page.
++     *
++     * The returned color may not be fully opaque. If the page didn't set
++     * any theme color, Color.TRANSPARENT is returned.
++     *
++     * @return theme color set by the page
++     * @hide
++     */
++    public int getThemeColor() {
++        if (mGetThemeColorMethod != null) {
++            try {
++                return (Integer) mGetThemeColorMethod.invoke(mProvider);
++            } catch (IllegalAccessException | InvocationTargetException e) {
++                // ignored, fall back to returning transparent
++            }
++        }
++        return Color.TRANSPARENT;
++    }
++
+     /**
+      * Gets the height of the HTML content.
+      *
+-- 
+2.17.2 (Apple Git-113)
+
